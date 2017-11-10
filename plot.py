@@ -50,7 +50,7 @@ def plot_maze(grid,save=False,full=False):
 	
 	# If plot needs saving
 	if(save):
-		fig.savefig(save)
+		fig.savefig(save+'.png',dpi=300)
 
 	# If full screen required
 	if(full):
