@@ -28,11 +28,13 @@ def generate_maze(x,y):
 	# Loop till all cells are not visited
 	while True:
 
+		# Get next possible random move
 		nx,ny=get_moves(visited,cx,cy,x-1,y-1)
+
+		# Reached end, need to backtrack
 		if(nx==-1 or ny==-1):
 			cx=int(cx)
 			cy=int(cy)
-			# print("ned")
 			visited[cx][cy]=1
 			ncx=parent_x[cx][cy]
 			ncy=parent_y[cx][cy]
@@ -40,10 +42,11 @@ def generate_maze(x,y):
 			cy=ncy
 			cx=int(cx)
 			cy=int(cy)
+
+		# Move to next cell
 		else:
 			cx=int(cx)
 			cy=int(cy)
-			# print(str(nx)+":"+str(ny))
 			parent_x[nx][ny]=cx
 			parent_y[nx][ny]=cy
 			visited[cx][cy]=1
@@ -63,12 +66,15 @@ def generate_maze(x,y):
 # Get all possible directions for maze generator
 def get_moves(visited,x,y,x_lim,y_lim):
 
+	# Randomly choose move
 	what_to_try=['up','down','right','left']
 	shuffle(what_to_try)
 
+	# Just in case
 	x=int(x)
 	y=int(y)
-	# print(str(x)+":"+str(y))
+
+	# Try different moves if possible
 	for direction in what_to_try:
 		if(direction=='up'):
 			if(y>0 and visited[x][y-1]==0):
@@ -82,6 +88,8 @@ def get_moves(visited,x,y,x_lim,y_lim):
 		elif(direction=='right'):
 			if(x<x_lim and visited[x+1][y]==0):
 				return x+1,y
+	
+	# Need to backtrack
 	return (-1,-1)
 
 
@@ -113,6 +121,3 @@ def convert_to_maze_format(grid,parent_x,parent_y):
 
 	# Return the generated grid
 	return newgrid
-
-
-

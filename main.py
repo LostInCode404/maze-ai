@@ -8,7 +8,7 @@ from plot import plot_maze
 from generate import generate_maze as generate
 
 # Generate maze
-maze=generate(100,100)
+maze=generate(50,50)
 
 # Plot the generated maze
 plot_maze(maze,full=True,save="images/plot")

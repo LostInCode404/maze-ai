@@ -15,6 +15,8 @@ grid_states={
 	'START':3,
 	'GOAL':4
 }
+
+# Map colors to different states
 color_mapper=[
 	(0.1,0.1,0.1),
 	(0.6,0.6,0.6),
@@ -39,7 +41,7 @@ def plot_maze(grid,save=False,full=False):
 	# Configure grid
 	grid_const=400
 	if(full):
-		grid_const=550
+		grid_const=555
 	fig,axes=plt.subplots(1,1)
 	axes.scatter(x,y,math.pow(grid_const/max(grid.shape[0],grid.shape[1]),2),color,marker="s")
 	axes.set_aspect('equal','box')
