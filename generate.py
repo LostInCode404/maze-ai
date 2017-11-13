@@ -117,7 +117,7 @@ def convert_to_maze_format(grid,parent_x,parent_y):
 				newgrid[int(i*2-xdif)][int(j*2-ydif)]=states['EMPTY']
 
 	# Randomly clear some boxes so that it is not a perfect maze
-	box_size=5
+	box_size=20
 	boxes_x=int(newgrid.shape[0]/box_size)
 	boxes_y=int(newgrid.shape[1]/box_size)
 	for i in range(boxes_x):

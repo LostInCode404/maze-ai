@@ -7,6 +7,7 @@ import sys
 # Import project modules
 from plot import grid_states as states
 from util import *
+from graph import graph
 
 # Main Solve maze method
 def solve_maze(grid,start,end):
@@ -19,10 +20,36 @@ def solve_maze(grid,start,end):
 	print("Solving... ",end='')
 
 	# Optimize to grid to a graph by drastically reducing nodes
-	optimize_to_graph(grid)
+	maze=optimize_to_graph(grid)
+
+	#
+	# Here will come the code to run A* algorithm on the object
+	# maze returned by optimize_to_graph(grid)
+	# 
+
+	# Print end message
+	print("Done")
+
+	# Just for tesing the performance of optimiser
+	print("Performance of optimiser:")
+	nc=0
+	cel=0
+	for i in range(grid.shape[0]):
+		for j in range(grid.shape[1]):
+			if(grid[i][j]==states['NODE']):
+				nc+=1
+			if(grid[i][j]!=states['WALL']):
+				cel+=1
+	print("Total cells in maze: "+str(grid.shape[0]*grid.shape[1]))
+	print("Movable cells in maze: "+str(cel))
+	print("Total nodes in graph: "+str(nc+2))
+	nc=0
+	for fro_n in maze.list:
+		for t in maze.list[fro_n]:
+			nc+=1
+	print("Total bi-dir edges in graph: "+str(nc/2))
 
 	# Return modified grid
-	print("Done")
 	return grid
 
 
@@ -30,14 +57,18 @@ def solve_maze(grid,start,end):
 def optimize_to_graph(grid):
 
 	# Initialize variables
+	maze=graph()
 	visited=np.zeros(shape=(grid.shape[0],grid.shape[1]))
 	
 	# Explore all grid cells to generate graph nodes
-	explore(0,0,grid,None,visited,[])
+	explore(0,0,grid,None,visited,[],maze)
+
+	# Return the graph
+	return maze
 
 
 # Explore all
-def explore(x,y,grid,prev,visited,edge):
+def explore(x,y,grid,prev,visited,edge,maze):
 
 	# Exit recursion if visiting a already visited node
 	if(visited[x][y]==1):
@@ -159,19 +190,19 @@ def explore(x,y,grid,prev,visited,edge):
 				grid[x][y]=states['NODE']
 		else:
 			edge.append(ndir)
-		# print(edge)
+		maze.add_edge_from_seq(edge)
 		return
 	elif(counter==1 and not(x==grid.shape[0]-1 and y==grid.shape[1]-1)):
 		for pos in possibilities:
 			if(possibilities[pos]):
 				edge.append((x,y))
-				explore(next_positions[pos][0],next_positions[pos][1],grid,not_to_move[pos],visited,edge)
+				explore(next_positions[pos][0],next_positions[pos][1],grid,not_to_move[pos],visited,edge,maze)
 	else:
 		edge.append((x,y))
-		# print(edge)
+		maze.add_edge_from_seq(edge)
 		if(not(x==grid.shape[0]-1 and y==grid.shape[1]-1)):
 			grid[x][y]=states['NODE']
 		for pos in possibilities:
 			if(possibilities[pos]):
-				explore(next_positions[pos][0],next_positions[pos][1],grid,not_to_move[pos],visited,[(x,y)])
+				explore(next_positions[pos][0],next_positions[pos][1],grid,not_to_move[pos],visited,[(x,y)],maze)
 				
