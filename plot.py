@@ -1,4 +1,5 @@
 # Import libraries
+from __future__ import print_function 
 import matplotlib.pyplot as plt
 import numpy as np
 import math
@@ -13,7 +14,8 @@ grid_states={
 	'EMPTY':1,
 	'PATH':2,
 	'START':3,
-	'GOAL':4
+	'GOAL':4,
+	'NODE':5
 }
 
 # Map colors to different states
@@ -22,11 +24,15 @@ color_mapper=[
 	(0.6,0.6,0.6),
 	(0,0.8,1),
 	(1,0,0),
-	(0,1,0)
+	(0,1,0),
+	(0,0,1)
 ]
 
 # Method to plot based one the above given mappings
-def plot_maze(grid,save=False,full=False):
+def plot_maze(grid,save=False,full=False,show=False):
+
+	# Print init message
+	print("Creating maze image... ",end='')
 	
 	# Initialize variables and plot parameters
 	x=[]
@@ -39,20 +45,23 @@ def plot_maze(grid,save=False,full=False):
 			color.append(color_mapper[int(grid[i][j])])
 
 	# Configure grid
-	grid_const=400
+	grid_const=600
 	if(full):
-		grid_const=555
-	fig,axes=plt.subplots(1,1)
-	axes.scatter(x,y,math.pow(grid_const/max(grid.shape[0],grid.shape[1]),2),color,marker="s")
+		grid_const=800
+	fig,axes=plt.subplots(1,1,figsize=(10,10))
+	axes.scatter(x,y,math.pow(grid_const/max(grid.shape[0],grid.shape[1]),2),color,marker="s",lw=0.05)
 	axes.set_aspect('equal','box')
 	fig.tight_layout()
 	plt.ylim((0,grid.shape[1]+1))
 	plt.xlim((0,grid.shape[0]+1))
 	plt.axis('off')
+	print("Done")
 	
 	# If plot needs saving
 	if(save):
-		fig.savefig(save+'.png',dpi=300)
+		print("Saving maze image... ",end='')
+		fig.savefig(save+'.png',dpi=500)
+		print("Done")
 
 	# If full screen required
 	if(full):
@@ -60,4 +69,7 @@ def plot_maze(grid,save=False,full=False):
 		mng.resize(*mng.window.maxsize())
 
 	# Show plot
-	plt.show()
+	if(show):
+		print("Showing maze image... ",end='')
+		plt.show()
+		print("Done")	

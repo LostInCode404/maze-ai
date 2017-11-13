@@ -1,10 +1,14 @@
 # Import libraries
 from __future__ import print_function 
-import matplotlib.pyplot as plt
 import numpy as np
 import math
-from plot import grid_states as states
 from random import shuffle
+from random import randint
+
+# Import project modules
+from plot import grid_states as states
+from util import can_be_removed
+
 
 # Method to generate maze
 def generate_maze(x,y):
@@ -110,8 +114,24 @@ def convert_to_maze_format(grid,parent_x,parent_y):
 				newgrid[i*2][j*2]=states['EMPTY']
 				xdif=i-parent_x[i][j]
 				ydif=j-parent_y[i][j]
-				# print(str(xdif)+":"+str(ydif)+"  "+str(parent_x[i][j])+":"+str(parent_x[i][j]))
 				newgrid[int(i*2-xdif)][int(j*2-ydif)]=states['EMPTY']
+
+	# Randomly clear some boxes so that it is not a perfect maze
+	box_size=5
+	boxes_x=int(newgrid.shape[0]/box_size)
+	boxes_y=int(newgrid.shape[1]/box_size)
+	for i in range(boxes_x):
+		for j in range(boxes_y):
+			done=False
+			while(not done):
+				index_x=randint(0,box_size-1)
+				index_y=randint(0,box_size-1)
+				if(newgrid[i*box_size+index_x][j*box_size+index_y]!=states['EMPTY']):
+					if(can_be_removed(i*box_size+index_x,j*box_size+index_y,newgrid)):
+						newgrid[i*box_size+index_x][j*box_size+index_y]=states['EMPTY']
+						done=True
+
+
 
 	# Set last tile as goal
 	newgrid[grid.shape[0]*2-2][grid.shape[1]*2-2]=states['GOAL']
