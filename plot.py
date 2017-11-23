@@ -29,10 +29,11 @@ color_mapper=[
 ]
 
 # Method to plot based one the above given mappings
-def plot_maze(grid,save=False,full=False,show=False):
+def plot_maze(grid,save=False,full=False,show=False,show_progress=False):
 
 	# Print init message
-	print("Creating maze image... ",end='')
+	if(show_progress):
+		print("Creating maze image... ",end='')
 	
 	# Initialize variables and plot parameters
 	x=[]
@@ -55,13 +56,16 @@ def plot_maze(grid,save=False,full=False,show=False):
 	plt.ylim((0,grid.shape[1]+1))
 	plt.xlim((0,grid.shape[0]+1))
 	plt.axis('off')
-	print("Done")
+	if(show_progress):
+		print("Done")
 	
 	# If plot needs saving
 	if(save):
-		print("Saving maze image... ",end='')
+		if(show_progress):
+			print("Saving maze image... ",end='')
 		fig.savefig(save+'.png',dpi=500)
-		print("Done")
+		if(show_progress):
+			print("Done")
 
 	# If full screen required
 	if(full):
@@ -70,6 +74,8 @@ def plot_maze(grid,save=False,full=False,show=False):
 
 	# Show plot
 	if(show):
-		print("Showing maze image... ",end='')
+		if(show_progress):
+			print("Showing maze image... ",end='')
 		plt.show()
-		print("Done")	
+		if(show_progress):
+			print("Done")	

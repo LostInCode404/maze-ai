@@ -81,3 +81,19 @@ def can_be_removed(x,y,grid):
 
 	# Otherwise, return false
 	return False
+
+
+# Method to plot an edge into grid
+def plot_edge(grid,edge):
+
+	# Mark all grid cells in the edge as marked
+	for i in range(1,len(edge)-1):
+		grid[edge[i][0]][edge[i][1]]=states['PATH']
+
+
+# Method to plot an edge into grid
+def unplot_edge(grid,edge):
+
+	# Mark all grid cells in the edge as marked
+	for i in range(1,len(edge)-1):
+		grid[edge[i][0]][edge[i][1]]=states['EMPTY']

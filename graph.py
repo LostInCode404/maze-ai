@@ -24,14 +24,28 @@ class graph(object):
 
 		# Add the from_node to to_node edge
 		if(to_node not in self.list[from_node]):
-			self.list[from_node][to_node]=[]
-		self.list[from_node][to_node].append(path)
+			self.list[from_node][to_node]=path
+		else:
+			if(len(self.list[from_node][to_node])>len(path)):
+				self.list[from_node][to_node]=path
 
-		# Add the to_node to from_node edge
-		# Note: no need to reverse edge list, as it'll just be used for plotting
+		# Add the from_node to to_node edge
 		if(from_node not in self.list[to_node]):
-			self.list[to_node][from_node]=[]
-		self.list[to_node][from_node].append(path)
+			self.list[to_node][from_node]=path
+		else:
+			if(len(self.list[to_node][from_node])>len(path)):
+				self.list[to_node][from_node]=path
+
+		# # Add the from_node to to_node edge
+		# if(to_node not in self.list[from_node]):
+		# 	self.list[from_node][to_node]=[]
+		# self.list[from_node][to_node].append(path)
+
+		# # Add the to_node to from_node edge
+		# # Note: no need to reverse edge list, as it'll just be used for plotting
+		# if(from_node not in self.list[to_node]):
+		# 	self.list[to_node][from_node]=[]
+		# self.list[to_node][from_node].append(path)
 
 
 	# Method to add edge based on input sequence

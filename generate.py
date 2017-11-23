@@ -11,10 +11,11 @@ from util import can_be_removed
 
 
 # Method to generate maze
-def generate_maze(x,y):
+def generate_maze(x,y,show_progress=False):
 
 	# Print begin message
-	print("Generating maze... ",end='')
+	if(show_progress):
+		print("Generating maze... ",end='')
 
 	# Initialize x and y
 	x=int(x+1)/2
@@ -60,11 +61,12 @@ def generate_maze(x,y):
 			cy=int(cy)
 
 		if(cx==0 and cy==0):
-			print("Done")
+			if(show_progress):
+				print("Done")
 			break
 
 	# Convert to required format
-	return convert_to_maze_format(visited,parent_x,parent_y)
+	return convert_to_maze_format(visited,parent_x,parent_y,show_progress=show_progress)
 
 
 # Get all possible directions for maze generator
@@ -98,10 +100,11 @@ def get_moves(visited,x,y,x_lim,y_lim):
 
 
 # Convert to different grid format for caclulations and plotting
-def convert_to_maze_format(grid,parent_x,parent_y):
+def convert_to_maze_format(grid,parent_x,parent_y,show_progress=False):
 
 	# Print begin message
-	print("Converting to required format... ",end='')
+	if(show_progress):
+		print("Converting to required format... ",end='')
 
 	# New grid to store values
 	newgrid=np.zeros(shape=(grid.shape[0]*2-1,grid.shape[1]*2-1))
@@ -117,7 +120,7 @@ def convert_to_maze_format(grid,parent_x,parent_y):
 				newgrid[int(i*2-xdif)][int(j*2-ydif)]=states['EMPTY']
 
 	# Randomly clear some boxes so that it is not a perfect maze
-	box_size=20
+	box_size=10
 	boxes_x=int(newgrid.shape[0]/box_size)
 	boxes_y=int(newgrid.shape[1]/box_size)
 	for i in range(boxes_x):
@@ -137,7 +140,8 @@ def convert_to_maze_format(grid,parent_x,parent_y):
 	newgrid[grid.shape[0]*2-2][grid.shape[1]*2-2]=states['GOAL']
 
 	# Done
-	print("Done")
+	if(show_progress):
+		print("Done")
 
 	# Return the generated grid
 	return newgrid
