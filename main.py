@@ -14,10 +14,10 @@ from solve import solve_maze as solve
 maze=generate(101,101,show_progress=True)
 
 # Plot the generated maze
-plot_maze(maze,full=False,show=True,save="images/generated",show_progress=True)
+plot_maze(maze,full=True,show=True,save="images/maze_generated",show_progress=True)
 
 # Solve the maze
 solve(maze,(0,0),(maze.shape[0]-1,maze.shape[1]-1),show_progress=True)
 
 # Plot the solved maze
-plot_maze(maze,full=False,show=True,save="images/solved",show_progress=True)
+plot_maze(maze,full=True,show=True,save="images/maze_solved",show_progress=True)

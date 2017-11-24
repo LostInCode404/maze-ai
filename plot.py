@@ -46,9 +46,7 @@ def plot_maze(grid,save=False,full=False,show=False,show_progress=False):
 			color.append(color_mapper[int(grid[i][j])])
 
 	# Configure grid
-	grid_const=600
-	if(full):
-		grid_const=800
+	grid_const=800
 	fig,axes=plt.subplots(1,1,figsize=(10,10))
 	axes.scatter(x,y,math.pow(grid_const/max(grid.shape[0],grid.shape[1]),2),color,marker="s",lw=0.05)
 	axes.set_aspect('equal','box')
@@ -63,7 +61,7 @@ def plot_maze(grid,save=False,full=False,show=False,show_progress=False):
 	if(save):
 		if(show_progress):
 			print("Saving maze image... ",end='')
-		fig.savefig(save+'.png',dpi=500)
+		fig.savefig(save+'.png',dpi=100)
 		if(show_progress):
 			print("Done")
 

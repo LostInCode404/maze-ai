@@ -53,7 +53,7 @@ def solve_maze(grid,start,end,show_progress=False):
 		for node in maze.list:
 			for edge in maze.list[node]:
 				plot_edge(grid,maze.list[node][edge])
-		plot_maze(grid,full=False,show=True,save="images/pruned")
+		plot_maze(grid,full=True,show=True,save="images/maze_optimized")
 		for node in maze.list:
 			for edge in maze.list[node]:
 				unplot_edge(grid,maze.list[node][edge])
@@ -63,7 +63,7 @@ def solve_maze(grid,start,end,show_progress=False):
 		print("Solving... ",end='\n')
 
 	# Run A* and get shortest path
-	shortest_path=a_star(maze,(0,0),(grid.shape[0]-1,grid.shape[1]-1))
+	shortest_path=a_star(maze,(0,0),(grid.shape[0]-1,grid.shape[1]-1),show_progress=show_progress)
 	# Loop and plot the shortest path
 	for i in range(len(shortest_path)-1):
 		plot_full_edge(grid,maze.list[shortest_path[i]][shortest_path[i+1]])
@@ -242,7 +242,7 @@ def explore(x,y,grid,prev,visited,edge,maze):
 					
 
 # A* shortest path finding algorithm
-def a_star(maze,start,end):
+def a_star(maze,start,end,show_progress=False):
 
 	# Initialize variables
 	adj_list=maze.list
@@ -266,8 +266,9 @@ def a_star(maze,start,end):
 
 		# End if we have reached goal node
 		if(current_node==end):
-			print("Reached end node by shortest path. Getting path...",end='')
-			print("Done")
+			if(show_progress):
+				print("Reached end node by shortest path. Getting path...",end='')
+				print("Done")
 			return get_path(start,end,open_list,closed_list)
 
 		# Add current_node to closed list and remove from open
