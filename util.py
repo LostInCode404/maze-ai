@@ -90,6 +90,14 @@ def plot_edge(grid,edge):
 	for i in range(1,len(edge)-1):
 		grid[edge[i][0]][edge[i][1]]=states['PATH']
 
+# Method to plot an edge into grid
+def plot_full_edge(grid,edge):
+
+	# Mark all grid cells in the edge as marked
+	for i in range(0,len(edge)):
+		if(grid[edge[i][0]][edge[i][1]]!=states['START'] and grid[edge[i][0]][edge[i][1]]!=states['GOAL']):
+			grid[edge[i][0]][edge[i][1]]=states['PATH']
+
 
 # Method to plot an edge into grid
 def unplot_edge(grid,edge):
@@ -97,3 +105,4 @@ def unplot_edge(grid,edge):
 	# Mark all grid cells in the edge as marked
 	for i in range(1,len(edge)-1):
 		grid[edge[i][0]][edge[i][1]]=states['EMPTY']
+

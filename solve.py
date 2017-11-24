@@ -27,31 +27,6 @@ def solve_maze(grid,start,end,show_progress=False):
 	if(show_progress):	
 		print("Done")
 
-	# If show progress is True, show the nodes selected by optimizer
-	# and edges that'll be considered and those that will be pruned
-	if(show_progress):
-		for node in maze.list:
-			for edge in maze.list[node]:
-				plot_edge(grid,maze.list[node][edge])
-		plot_maze(grid,full=False,show=True,save="images/pruned")
-		for node in maze.list:
-			for edge in maze.list[node]:
-				unplot_edge(grid,maze.list[node][edge])
-
-	# Solve the maze
-	if(show_progress):
-		print("Solving... ",end='')
-
-	for node in maze.list:
-		for edge in maze.list[node]:
-			print(edge)
-			print(maze.list[node][edge])
-
-
-	# Print end message
-	if(show_progress):
-		print("Done")
-
 	# Just for tesing the performance of optimiser
 	if(show_progress):
 		print("Performance of optimiser:")
@@ -71,6 +46,27 @@ def solve_maze(grid,start,end,show_progress=False):
 			for t in maze.list[fro_n]:
 				nc+=1
 		print("Total bi-dir edges in graph: "+str(nc/2))
+
+	# If show progress is True, show the nodes selected by optimizer
+	# and edges that'll be considered and those that will be pruned
+	if(show_progress):
+		for node in maze.list:
+			for edge in maze.list[node]:
+				plot_edge(grid,maze.list[node][edge])
+		plot_maze(grid,full=False,show=True,save="images/pruned")
+		for node in maze.list:
+			for edge in maze.list[node]:
+				unplot_edge(grid,maze.list[node][edge])
+
+	# Solve the maze
+	if(show_progress):
+		print("Solving... ",end='\n')
+
+	# Run A* and get shortest path
+	shortest_path=a_star(maze,(0,0),(grid.shape[0]-1,grid.shape[1]-1))
+	# Loop and plot the shortest path
+	for i in range(len(shortest_path)-1):
+		plot_full_edge(grid,maze.list[shortest_path[i]][shortest_path[i+1]])
 
 	# Return modified grid
 	return grid
@@ -244,3 +240,117 @@ def explore(x,y,grid,prev,visited,edge,maze):
 				if(possibilities[pos]):
 					queue.append((next_positions[pos][0],next_positions[pos][1],not_to_move[pos],[(x,y)]))
 					
+
+# A* shortest path finding algorithm
+def a_star(maze,start,end):
+
+	# Initialize variables
+	adj_list=maze.list
+	open_list={}
+	closed_list={}
+
+	# Add initial node
+	current_node={
+		'f':get_h(start,end),
+		'g':0,
+		'h':get_h(start,end),
+		'parent':None
+	}
+	open_list[start]=current_node
+
+	# Loop while open_list is not empty
+	while(len(open_list)>0):
+
+		# Get current_node from open_list with minimun f(n)=g(n)+h(n)
+		current_node=get_min_f_node(open_list)
+
+		# End if we have reached goal node
+		if(current_node==end):
+			print("Reached end node by shortest path. Getting path...",end='')
+			print("Done")
+			return get_path(start,end,open_list,closed_list)
+
+		# Add current_node to closed list and remove from open
+		closed_list[current_node]=open_list[current_node]
+		del open_list[current_node]
+
+		# Traverse all neighbours of current node
+		for neighbour in adj_list[current_node]:
+
+			# If neighbour in closed list, ignore it
+			if(neighbour not in closed_list):
+
+				# Neighbout in open list, update g() and parent if required
+				if(neighbour in open_list):
+					new_g_value=closed_list[current_node]['g']+len(adj_list[current_node][neighbour])
+					if(open_list[neighbour]['g']>new_g_value):
+						open_list[neighbour]['g']=new_g_value
+						open_list[neighbour]['parent']=current_node
+
+				# Neighbour is not in open list yet, add it
+				else:
+					new_node={
+						'parent':current_node,
+						'g':closed_list[current_node]['g']+len(adj_list[current_node][neighbour]),
+						'h':get_h(neighbour,end)
+					}
+					new_node['f']=new_node['g']+new_node['h']
+					open_list[neighbour]=new_node
+
+	# If no path found(will never happen with current generator)
+	print("No path found! LOL")
+	return None
+
+
+# Below functions are utility functions for A* algorithm
+# Heuristic function h() for A*, using manhattan distance
+def get_h(node,goal):
+
+	# Return manhattan distance
+	x_dif=abs(node[0]-goal[0])
+	y_dif=abs(node[1]-goal[1])
+	return x_dif+y_dif
+
+
+# Select node with minimum f value, i.e. f(n)=g(n)+h(n)
+def get_min_f_node(open_list):
+
+	# Initialize variables
+	min_f=float('inf')
+	min_node=None
+
+	# Loop over all nodes in open_list
+	for node in open_list:
+
+		# Check and edit min_f and min_node
+		if(open_list[node]['f']<min_f):
+			min_f=open_list[node]['f']
+			min_node=node
+
+	# Return the required node
+	return min_node
+
+
+# Get the path by backtracking
+def get_path(start,end,open_list,closed_list):
+
+	# Initialise dictionary with data for all nodes
+	new_dict={}
+	new_dict.update(open_list)
+	new_dict.update(closed_list)
+
+	# Initialize variables
+	path=[]
+	current=end
+
+	# Backtrack from end node till we reach start parent
+	while(current!=None):
+
+		# Add current to path
+		path.append(current)
+
+		# Set current for next iteration to parent of the current node
+		current=new_dict[current]['parent']
+
+	# Return path
+	return path

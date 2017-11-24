@@ -20,4 +20,4 @@ plot_maze(maze,full=False,show=True,save="images/generated",show_progress=True)
 solve(maze,(0,0),(maze.shape[0]-1,maze.shape[1]-1),show_progress=True)
 
 # Plot the solved maze
-# plot_maze(maze,full=False,show=True,save="images/solved")
+plot_maze(maze,full=False,show=True,save="images/solved",show_progress=True)
