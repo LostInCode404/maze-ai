@@ -61,7 +61,7 @@ def plot_maze(grid,save=False,full=False,show=False,show_progress=False):
 	if(save):
 		if(show_progress):
 			print("Saving maze image... ",end='')
-		fig.savefig(save+'.png',dpi=100)
+		fig.savefig(save+'.png',dpi=200)
 		if(show_progress):
 			print("Done")
 

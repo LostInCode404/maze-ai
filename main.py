@@ -11,7 +11,7 @@ from generate import generate_maze as generate
 from solve import solve_maze as solve
 
 # Generate maze
-maze=generate(101,101,show_progress=True)
+maze=generate(25,25,show_progress=True)
 
 # Plot the generated maze
 plot_maze(maze,full=True,show=True,save="images/maze_generated",show_progress=True)
